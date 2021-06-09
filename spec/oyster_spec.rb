@@ -33,7 +33,6 @@ describe Oyster do
     end
   end
 
-
   it { is_expected.to respond_to(:touch_out) }
   it { is_expected.to respond_to(:in_journey?) }
 
@@ -54,7 +53,6 @@ describe Oyster do
       subject.touch_in(entry_station)
       expect( subject.entry_station ).to eq(entry_station)
     end
-
   end
 
 describe "#touch_out" do
@@ -67,7 +65,6 @@ describe "#touch_out" do
 
   it "saves current journey history" do
     expect(subject.journey_history).to be_instance_of(Array)
-     # expect(assigns(:comment)).to be_instance_of(Comment)
   end
 
   it "stores at touch out the current journey history" do
@@ -115,7 +112,5 @@ describe "#touch_out" do
   end
 
 end
-
   # expect{subject.top_up(2)}.to change(subject, :balance).by(2)
-
 end

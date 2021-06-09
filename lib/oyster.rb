@@ -10,12 +10,10 @@ class Oyster
     @journey_history = []
   end
 
-
   def top_up(money)
     fail "Oh no! You reached the max balance" if money + balance > MAX_BALANCE
     @balance = @balance + money
   end
-
 
   def touch_in(entry_station)
     raise "Ops! Top it up!" if balance < MIN_FARE
