@@ -2,11 +2,12 @@ class Oyster
 
   MAX_BALANCE = 90
   MIN_FARE = 1
-  attr_reader :balance, :in_use, :entry_station
+  attr_reader :balance, :in_use, :entry_station, :exit_station, :journey_history
 
   def initialize
     @balance = 0
     @in_use = false
+    @journey_history = []
   end
 
 
@@ -22,8 +23,10 @@ class Oyster
     @in_use = true
   end
 
-  def touch_out
+  def touch_out(exit_station)
     deduct(MIN_FARE)
+    @exit_station = exit_station
+    @journey_history << {:entry => @entry_station, :exit => @exit_station}
     @entry_station = nil
     @in_use = false
   end

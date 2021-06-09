@@ -59,14 +59,34 @@ describe Oyster do
 
 describe "#touch_out" do
   let(:entry_station){ double :station }
+  let(:exit_station){ double :station }
   it "touches out" do
     allow(subject).to receive(:balance).and_return 10
-    expect(subject.touch_out).to eq(false)
+    expect(subject.touch_out(exit_station)).to eq(false)
   end
+
+  it "saves current journey history" do
+    expect(subject.journey_history).to be_instance_of(Array)
+     # expect(assigns(:comment)).to be_instance_of(Comment)
+  end
+
+  it "stores at touch out the current journey history" do
+    subject.top_up(10)
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect(subject.journey_history).to eq([{:entry => entry_station, :exit => exit_station}])
+  end
+
+  it "stores the exit station" do
+    subject.top_up(10)
+    subject.touch_out(exit_station)
+    expect( subject.exit_station ).to eq(exit_station)
+  end
+
   it "forgets the entry station" do
     subject.top_up(10)
     subject.touch_in(entry_station)
-    subject.touch_out
+    subject.touch_out(exit_station)
     expect(subject.entry_station).to eq(nil)
   end
 
@@ -79,13 +99,21 @@ describe "#touch_out" do
   it "check if not in journey" do
     allow(subject).to receive(:balance).and_return 10
     subject.touch_in(entry_station)
-    subject.touch_out
+    subject.touch_out(exit_station)
     expect(subject).not_to be_in_journey
   end
 
   it "charges the card when you touch out" do
-    expect{ subject.touch_out }.to change(subject, :balance).by(-1)
+    expect{ subject.touch_out(exit_station) }.to change(subject, :balance).by(-1)
   end
+
+  it "stores at touch out the current journey history" do
+    subject.top_up(10)
+    subject.touch_in("Kings Cross")
+    subject.touch_out("Victoria")
+    expect(subject.journey_history).to eq([{:entry => "Kings Cross", :exit => "Victoria"}])
+  end
+
 end
 
   # expect{subject.top_up(2)}.to change(subject, :balance).by(2)
